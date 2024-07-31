@@ -1,4 +1,5 @@
-// Closure in JavaScript is a form of lexical scoping used to preserve variables from the outer scope of a function in the inner scope of a function. Lexical scoping is the process used to define the scope of a variable by its position in the source code
+// "Closure in JavaScript is a form of lexical scoping used to preserve variables from the outer scope of a function in the inner scope of a function.
+//  Lexical scoping is the process used to define the scope of a variable by its position in the source code
 
 function makeFunc() {
   const name = "Mozilla";
@@ -55,17 +56,22 @@ console.log(counter.value()); // 1.
 
 // InterView Questions
 
-for (var i = 0; i < 5; i++) { // using var i is refering to the same variable
-  setTimeout(function () {
-    console.log(i); // 5 5 5 5 5
-  }, 1000);
-}
-
-for (let i = 0; i < 5; i++) {
-  setTimeout(function () {
-    console.log(i); // 0 1 2 3 4
-  }, 1000);
-}
+for (var id = 0; id < 3; id++) {
+    // The setTimeout function uses a callback, and by the time the callback is executed,
+    // the loop has already completed, so 'id' will always be 3 in all setTimeout callbacks.
+    setTimeout(function () {
+      console.log('seconds: ' + id);
+    }, id * 1000);
+  }
+     
+  for (let id = 0; id < 3; id++) {
+    // The use of 'let' creates a block-scoped variable, fixing the closure issue.
+    // Now each setTimeout callback captures the correct value of 'id'.
+    setTimeout(function () {
+      console.log('seconds: ' + id);
+    }, id * 1000);
+  }
+     
 
 
 // we have to get the output same as let but using for
@@ -78,3 +84,19 @@ for (var i = 0; i < 5; i++) {
   }
   inner(i);
 }
+
+// "IIFE and Closures"
+
+// "Another way to avoid this issue with closures in a loop is to use the IIFE (Immediately Invoked Function Expression) syntax, which forces an immediate invocation of the setTimeout function as soon as the loop runs. 
+// So instead of essentially stacking the setTimeout function and waiting for the loop to finish, then execute the code, the setTimeout runs as soon as the loop starts, which is the expected behavior. Let's see what the syntax for IIFE looks like below."
+
+for (var id = 1; id <= 3; id++) {
+    // Using an immediately-invoked function expression (IIFE) to create a new scope for each iteration.
+    // This helps avoid the closure issue with setTimeout.
+    (function (id) {
+      setTimeout(function () {
+        console.log('seconds: ' + id);
+      }, id * 3000);
+    })(id);
+  }
+     
